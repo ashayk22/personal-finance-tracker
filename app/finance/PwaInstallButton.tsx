@@ -14,22 +14,29 @@ function isStandalone() {
 export function PwaInstallButton() {
   const [prompt, setPrompt] = useState<InstallPromptEvent | null>(null);
   const [installed, setInstalled] = useState(false);
+  const [iosDevice, setIosDevice] = useState(false);
   const [iosSafari, setIosSafari] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
+  const [installHint, setInstallHint] = useState('');
 
   useEffect(() => {
     const ua = navigator.userAgent;
     const ios = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    setIosDevice(ios);
     setIosSafari(ios && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua));
     setInstalled(isStandalone());
-    setDismissed(localStorage.getItem(DISMISSED_KEY) === '1');
+    try { setDismissed(localStorage.getItem(DISMISSED_KEY) === '1'); } catch { /* Storage may be unavailable. */ }
     if (window.monetaInstallPrompt) setPrompt(window.monetaInstallPrompt);
 
     const onPromptAvailable = () => {
       if (window.monetaInstallPrompt) setPrompt(window.monetaInstallPrompt);
     };
-    const onInstalled = () => { setInstalled(true); setPrompt(null); };
+    const onInstalled = () => {
+      setInstalled(true);
+      setPrompt(null);
+      window.monetaInstallPrompt = undefined;
+    };
     const displayMode = window.matchMedia('(display-mode: standalone)');
     const onDisplayMode = () => setInstalled(isStandalone());
     window.addEventListener('moneta-install-ready', onPromptAvailable);
@@ -43,38 +50,53 @@ export function PwaInstallButton() {
   }, []);
 
   const install = async () => {
-    if (iosSafari) { setShowInstructions(true); return; }
-    if (!prompt || dismissed) return;
-    await prompt.prompt();
-    const choice = await prompt.userChoice;
-    setPrompt(null);
-    if (choice.outcome === 'accepted') setInstalled(true);
-    else {
-      localStorage.setItem(DISMISSED_KEY, '1');
-      setDismissed(true);
+    if (iosSafari) {
+      setInstallHint('In Safari, tap Share, then choose “Add to Home Screen”.');
+      setShowInstructions(true);
+      return;
     }
+    if (prompt && !dismissed) {
+      try {
+        await prompt.prompt();
+        const choice = await prompt.userChoice;
+        window.monetaInstallPrompt = undefined;
+        setPrompt(null);
+        if (choice.outcome === 'accepted') setInstalled(true);
+        else {
+          try { localStorage.setItem(DISMISSED_KEY, '1'); } catch { /* Storage may be unavailable. */ }
+          setDismissed(true);
+          setInstallHint('Installation was dismissed. You can install Moneta later from your browser menu.');
+        }
+      } catch {
+        setInstallHint('Your browser could not open its install prompt. Use the browser menu to install Moneta.');
+        setShowInstructions(true);
+      }
+      return;
+    }
+
+    if (!window.isSecureContext) {
+      setInstallHint('Installation requires HTTPS. Localhost is allowed for development.');
+    } else if (iosDevice) {
+      setInstallHint('Use your browser’s Share or menu control, then choose “Add to Home Screen”.');
+    } else if (dismissed) {
+      setInstallHint('You can install Moneta later from your browser menu.');
+    } else {
+      setInstallHint('This browser has not offered its install prompt. Check the browser menu for “Install app” or “Add to Home Screen”.');
+    }
+    setShowInstructions(true);
   };
 
   if (installed) return <p className="ft-install-status" role="status">Moneta is installed on this device.</p>;
-  const canPrompt = !!prompt && !dismissed;
   return (
     <div className="ft-install">
-      {(canPrompt || iosSafari) && (
-        <button type="button" className="ft-button ft-primary" onClick={() => void install()}>
-          {iosSafari ? <Share size={16} /> : <Download size={16} />}Add to Home Screen
-        </button>
-      )}
-      {!canPrompt && !iosSafari && (
-        <p className="ft-install-status">
-          {dismissed
-            ? 'You can install Moneta later from your browser menu.'
-            : 'To install, open your browser menu and choose “Install app” or “Add to Home Screen”.'}
-        </p>
-      )}
+      <button type="button" className="ft-button ft-primary" onClick={() => void install()}>
+        {iosSafari ? <Share size={16} /> : <Download size={16} />}Add to Home Screen
+      </button>
       {showInstructions && (
         <div className="ft-install-instructions" role="status">
           <b>Add Moneta to your Home Screen</b>
-          <span>In Safari, tap <Share size={14} aria-label="Share" /> Share, then choose “Add to Home Screen”.</span>
+          <span>{installHint || 'Open your browser menu and choose “Install app” or “Add to Home Screen”.'}</span>
+          {iosSafari && <span>On iOS Safari: tap <Share size={14} aria-label="Share" /> Share → Add to Home Screen.</span>}
           <button type="button" className="ft-link" onClick={() => setShowInstructions(false)}>Got it</button>
         </div>
       )}

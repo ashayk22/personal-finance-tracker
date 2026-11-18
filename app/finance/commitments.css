@@ -1,0 +1,127 @@
+.ft-commitments-page{gap:15px}
+.ft-commitment-intro{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:3px 1px 4px}
+.ft-commitment-intro h2{font-size:21px;line-height:1.2;margin:6px 0 5px;letter-spacing:-.55px}
+.ft-commitment-intro p{margin:0;color:#939aaa;font-size:11px}
+.ft-commitment-intro .ft-button{flex:0 0 auto;min-height:40px}
+.ft-commitment-kpis{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.ft-commitment-kpis .ft-kpi{padding:14px 12px;min-height:112px;gap:9px}
+.ft-commitment-kpis .ft-kpi strong{font-size:18px}
+.ft-kpi-icon.red{background:#38272b;color:#e58d99}
+.ft-commitment-charts{grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr)}
+.ft-reminder-banner,.ft-commitment-alert{display:flex;align-items:center;gap:12px;padding:12px 15px;border:2px solid #ffcc00;background:#29261b;color:#ffdc58}
+.ft-reminder-banner>div{display:grid;gap:3px;min-width:0}
+.ft-reminder-banner b{font-size:11px}
+.ft-reminder-banner span{font-size:10px;color:#d7c77e;overflow-wrap:anywhere}
+.ft-commitment-alert{font-size:11px;padding:10px 13px}
+.ft-commitment-alert.error{border-color:#e63b2e;background:#30201f;color:#ff998f}
+.ft-commitment-alert.success{border-color:#75cba3;background:#1e2a24;color:#9de1bd}
+.ft-commitment-unavailable{padding:22px;border:2px solid #ffcc00}
+.ft-commitment-unavailable h2{margin:8px 0;font-size:20px}
+.ft-commitment-unavailable p{color:#abb0ba;font-size:12px;line-height:1.6;max-width:680px}
+.ft-commitment-mix-chart{height:176px}
+.ft-commitment-total{border-top:1px solid #34343a;padding-top:12px;display:flex;justify-content:space-between;align-items:center;color:#a9abb1;font-size:10px}
+.ft-commitment-total b{font-size:16px;color:#ffcc00}
+.ft-timeline{display:grid;margin-top:13px}
+.ft-timeline-row{display:grid;grid-template-columns:10px minmax(0,1fr) auto auto;align-items:center;gap:10px;min-height:53px;border-top:1px solid #303037}
+.ft-timeline-dot{height:8px;width:8px;border-radius:50%;background:#ffcc00;box-shadow:0 0 0 3px #ffcc0024}
+.ft-timeline-dot.soon{background:#e9a340;box-shadow:0 0 0 3px #e9a34026}
+.ft-timeline-dot.today,.ft-timeline-dot.overdue{background:#e63b2e;box-shadow:0 0 0 3px #e63b2e26}
+.ft-timeline-row>div{display:grid;gap:3px;min-width:0}
+.ft-timeline-row>div b{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ft-timeline-row>div small,.ft-timeline-days{font-size:9px;color:#9297a1}
+.ft-timeline-days{white-space:nowrap}
+.ft-timeline-row>strong{font-size:10px;white-space:nowrap}
+.ft-commitment-list-card,.ft-commitment-history{padding:17px}
+.ft-commitment-list-card>.ft-section-head,.ft-commitment-history>.ft-section-head{margin-bottom:12px}
+.ft-commitment-list-card .ft-section-head p,.ft-commitment-history .ft-section-head p{font-size:10px;color:#9095a0;margin:5px 0 0}
+.ft-commitment-list{display:grid}
+.ft-commitment-row{display:grid;grid-template-columns:36px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:13px 0;border-top:1px solid #303037}
+.ft-commitment-type-mark{height:34px;width:34px;border:2px solid #ffcc00;display:grid;place-items:center;color:#ffcc00;background:#27251c}
+.ft-commitment-type-mark.insurance{color:#3977ff;border-color:#3977ff;background:#1d2636}
+.ft-commitment-type-mark.recurring{color:#e63b2e;border-color:#e63b2e;background:#302221}
+.ft-commitment-info{min-width:0}
+.ft-commitment-title{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ft-commitment-title>b{font-size:11px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ft-commitment-tag{font-size:7px;letter-spacing:.8px;color:#ffcc00;border:1px solid #8c741c;padding:3px 5px}
+.ft-commitment-row:has(.ft-commitment-type-mark.insurance) .ft-commitment-tag{color:#7ca1ff;border-color:#3977ff}
+.ft-commitment-info>p{font-size:9px;color:#b5b6bc;margin:5px 0 3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ft-commitment-info>small{font-size:9px;color:#858993}
+.ft-status-pill{font-size:8px;text-transform:uppercase;letter-spacing:.55px;padding:3px 5px;border:1px solid #5c5d64;color:#c5c5c9;white-space:nowrap}
+.ft-status-pill.due-soon{border-color:#b98232;color:#efbf73}
+.ft-status-pill.due-today,.ft-status-pill.overdue{border-color:#e63b2e;color:#ff9389}
+.ft-status-pill.paused{border-color:#666;color:#aaa}
+.ft-status-pill.completed{border-color:#75cba3;color:#91d8b0}
+.ft-commitment-amount{text-align:right;display:grid;gap:4px;white-space:nowrap}
+.ft-commitment-amount strong{font-size:12px}
+.ft-commitment-amount small{font-size:8px;color:#8c909a}
+.ft-commitment-actions{display:flex;align-items:center;gap:6px}
+.ft-mark-paid{border:2px solid #75cba3!important;background:#1b2b23!important;color:#a5e5bf!important;height:31px;padding:0 9px;font-size:9px;white-space:nowrap}
+.ft-add-commitment-small{height:31px;padding:0 10px}
+.ft-empty-mark{height:42px;width:42px;border:2px solid #ffcc00;color:#ffcc00;display:grid;place-items:center}
+.ft-commitment-empty{min-height:190px;border-top:1px solid #303037}
+.ft-commitment-empty>b{font-size:13px;color:#f5f0e8}
+.ft-commitment-empty>span{font-size:10px;color:#a0a1a7;text-align:center}
+.ft-commitment-empty .ft-button{margin-top:4px}
+.ft-history-row{display:flex;align-items:center;gap:10px;min-height:48px;border-top:1px solid #303037}
+.ft-history-check{height:22px;width:22px;display:grid;place-items:center;border:1px solid #75cba3;color:#75cba3;flex:0 0 auto}
+.ft-history-row>div{display:grid;gap:3px;flex:1;min-width:0}
+.ft-history-row b{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ft-history-row small{font-size:9px;color:#898d97}
+.ft-history-row strong{font-size:10px;white-space:nowrap}
+.ft-history-empty{min-height:72px;border-top:1px solid #303037}
+.ft-commitment-modal{width:min(100%,700px);max-height:calc(100dvh - 30px);overflow:auto}
+.ft-commitment-kind-switch{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:17px}
+.ft-commitment-kind-switch button{height:35px;border:2px solid #44444a;background:#1c1c20;color:#b5b5b9;font-size:10px;cursor:pointer}
+.ft-commitment-kind-switch button.selected{border-color:#ffcc00;background:#302a12;color:#ffdc58}
+.ft-commitment-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ft-commitment-form-grid .ft-field input,.ft-commitment-form-grid .ft-field select{height:39px;font-size:11px;border-radius:0}
+.ft-reminder-options{display:flex;gap:9px 16px;flex-wrap:wrap;margin:17px 0 0;padding:12px;border:1px solid #44444a}
+.ft-reminder-options legend{padding:0 5px;color:#a5a5ad;font-size:8px;letter-spacing:1px;font-weight:700}
+.ft-reminder-options label{display:flex;align-items:center;gap:6px;color:#c9c9cc;font-size:9px;cursor:pointer}
+.ft-reminder-options input{accent-color:#ffcc00}
+.ft-commitment-modal .ft-form-error{display:flex;align-items:center;gap:8px;margin-top:12px}
+
+@media(max-width:1180px){.ft-commitment-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){.ft-commitment-charts{grid-template-columns:1fr}}
+@media(max-width:760px){
+  .ft-side nav a{flex:1;min-width:0;padding-left:3px;padding-right:3px;font-size:7px}
+  .ft-commitment-intro{align-items:flex-start}
+  .ft-commitment-intro h2{font-size:18px}
+  .ft-commitment-intro p{max-width:260px;line-height:1.5}
+  .ft-commitment-intro .ft-button{height:36px;padding:0 10px;font-size:10px}
+  .ft-commitment-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ft-commitment-kpis .ft-kpi{padding:12px 10px;min-height:92px}
+  .ft-commitment-kpis .ft-kpi strong{font-size:16px}
+  .ft-commitment-row{grid-template-columns:32px minmax(0,1fr) auto;gap:9px}
+  .ft-commitment-type-mark{width:30px;height:30px}
+  .ft-commitment-amount{grid-column:2;grid-row:2;text-align:left;display:block}
+  .ft-commitment-amount small{margin-left:5px}
+  .ft-commitment-actions{grid-column:3;grid-row:1 / span 2;flex-direction:column;align-items:stretch}
+  .ft-commitment-actions .ft-icon-button{width:31px;height:30px}
+  .ft-mark-paid{height:32px}
+  .ft-timeline-row{grid-template-columns:9px minmax(0,1fr) auto;gap:8px}
+  .ft-timeline-row>strong{grid-column:2;text-align:left;font-size:9px;color:#ffdc58}
+  .ft-timeline-days{grid-column:3;grid-row:1 / span 2}
+  .ft-commitment-modal{max-height:calc(100dvh - 24px);padding:17px}
+}
+@media(max-width:430px){
+  .ft-commitment-intro{gap:8px}
+  .ft-commitment-intro h2{font-size:16px}
+  .ft-commitment-intro p{font-size:9px}
+  .ft-commitment-intro .ft-button{padding:0 8px;font-size:9px}
+  .ft-commitment-intro .ft-button svg{width:14px}
+  .ft-commitment-form-grid{grid-template-columns:1fr;gap:10px}
+  .ft-commitment-form-grid .ft-field input,.ft-commitment-form-grid .ft-field select{height:41px;font-size:12px}
+  .ft-commitment-row{gap:7px}
+  .ft-commitment-info>p{white-space:normal;line-height:1.35}
+  .ft-commitment-title>b{max-width:135px}
+  .ft-commitment-actions .ft-mark-paid{padding:0 6px;font-size:8px}
+  .ft-reminder-options{gap:9px 11px}
+  .ft-timeline-row>div b{max-width:155px}
+}
+@media(max-width:370px){
+  .ft-commitment-kpis{grid-template-columns:1fr 1fr}
+  .ft-commitment-kpis .ft-kpi-icon{display:none}
+  .ft-commitment-kpis .ft-kpi strong{font-size:14px}
+  .ft-commitment-intro{display:grid}
+}

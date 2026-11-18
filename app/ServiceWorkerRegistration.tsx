@@ -16,7 +16,9 @@ export default function ServiceWorkerRegistration() {
     };
     window.addEventListener('beforeinstallprompt', onBeforeInstallPrompt);
     if ('serviceWorker' in navigator) {
-      void navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch((error: unknown) => {
+      void navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(() => {
+        window.dispatchEvent(new Event('moneta-sw-ready'));
+      }).catch((error: unknown) => {
         console.error('Moneta service worker registration failed.', error);
       });
     }
