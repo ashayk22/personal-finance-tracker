@@ -133,3 +133,10 @@ html[data-theme="light"] select option{background:#fffdf7;color:#1b1a17}
 .ft-theme-current b{color:#f5f0e8;margin-left:4px}
 html[data-theme="light"] .ft-theme-toggle{background:#fffdf7;color:#1b1a17;border-color:#27251f;box-shadow:3px 3px 0 #27251f}
 html[data-theme="light"] .ft-theme-toggle:hover{background:#ffcc00;color:#171510}
+html[data-theme="light"] .ft-filters .ft-search{background:#f6f2e9;border-color:#625e55}
+html[data-theme="light"] .ft-filters .ft-search input{color:#1b1a17}
+html[data-theme="light"] .ft-filters .ft-search input::placeholder{color:#777166}
+html[data-theme="light"] .ft-filters .ft-search svg{color:#625e55}
+html[data-theme="light"] .ft-filters .ft-search:focus-within{background:#fffdf7;border-color:#004fc4;box-shadow:0 0 0 3px #004fc422}
+html[data-theme="light"] .ft-filters .ft-search:focus-within svg{color:#004fc4}
+@media(max-width:760px){html[data-theme="light"] .ft-side{background:#e9e3d7;border-color:#bcb5a8;box-shadow:12px 0 34px #211d1430}html[data-theme="light"] .ft-mobile-menu,html[data-theme="light"] .ft-mobile-close{background:#fffdf7;color:#1b1a17;border-color:#625e55}}
