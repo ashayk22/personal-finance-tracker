@@ -42,7 +42,7 @@ export function FinancePage() {
   const afterSave = async () => { closeForm(); await refresh(); };
   return <div className="ft-app">{mobileNavOpen && <button type="button" className="ft-mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setMobileNavOpen(false)}/>}<aside className={`ft-side${mobileNavOpen?' is-open':''}`}><div className="ft-side-brand-row"><Link to="/app/finance" className="ft-brand" onClick={()=>setMobileNavOpen(false)}><span className="ft-brand-icon"><Wallet size={20}/></span><span>Moneta</span></Link><button type="button" className="ft-mobile-close" aria-label="Close navigation" onClick={()=>setMobileNavOpen(false)}><X size={19}/></button></div><span className="ft-nav-label">WORKSPACE</span><nav>{[
     ['finance','Overview',LayoutDashboard],['transactions','Transactions',ReceiptIndianRupee],['investments','Investments',Landmark],['budgets','Budgets',Wallet],['analytics','Insights',ChartNoAxesCombined],['categories','Categories',Tags],['settings','Settings',Settings2],
-  ].map(([path,label,Icon]) => <Link key={String(path)} className={page===path?'active':''} to={path==='finance'?'/app/finance':`/app/finance/${path}`} onClick={()=>setMobileNavOpen(false)}><Icon size={18}/><span>{String(label)}</span></Link>)}</nav><div className="ft-side-foot"><div className="ft-avatar">{(user?.email||data.userId).slice(0,2).toUpperCase()}</div><div><b>{user?.email||'Your account'}</b><small>Private workspace</small></div><button type="button" className="ft-side-signout" title="Sign out" aria-label="Sign out" onClick={()=>void signOut()}><LogOut size={16}/></button></div></aside><main className="ft-main"><header className="ft-top"><div className="ft-title-group"><button type="button" className="ft-mobile-menu" aria-label="Open navigation" aria-expanded={mobileNavOpen} onClick={()=>setMobileNavOpen(true)}><Menu size={20}/></button><div><div className="ft-eyebrow">PERSONAL FINANCE</div><h1>{page==='finance'?'Good day':page==='transactions'?'Transactions':page==='investments'?'Investments & Commitments':page==='budgets'?'Monthly budgets':page==='analytics'?'Spending insights':page==='settings'?'Settings':'Categories'}</h1></div></div><div className="ft-top-actions"><ThemeToggle/><span className="ft-secure">●&nbsp; Private workspace</span><button className="ft-button ft-primary" onClick={() => { sessionStorage.setItem('finance-new-kind','expense'); setOpenForm(null); }}><Plus size={17}/> Add transaction</button></div></header>
+  ].map(([path,label,Icon]) => <Link key={String(path)} className={page===path?'active':''} to={path==='finance'?'/app/finance':`/app/finance/${path}`} onClick={()=>setMobileNavOpen(false)}><Icon size={18}/><span>{String(label)}</span></Link>)}</nav><div className="ft-side-foot"><div className="ft-avatar">{(user?.email||data.userId).slice(0,2).toUpperCase()}</div><div><b>{user?.email||'Your account'}</b><small>Private workspace</small></div><button type="button" className="ft-side-signout" title="Sign out" aria-label="Sign out" onClick={()=>void signOut()}><LogOut size={16}/></button></div></aside><main className="ft-main"><header className="ft-top"><div className="ft-title-group"><button type="button" className="ft-mobile-menu" aria-label="Open navigation" aria-expanded={mobileNavOpen} onClick={()=>setMobileNavOpen(true)}><Menu size={20}/></button><div className="ft-title-text"><div className="ft-eyebrow">PERSONAL FINANCE</div><h1>{page==='finance'?'Good day':page==='transactions'?'Transactions':page==='investments'?'Investments & Commitments':page==='budgets'?'Monthly budgets':page==='analytics'?'Spending insights':page==='settings'?'Settings':'Categories'}</h1></div></div><div className="ft-top-actions"><ThemeToggle/><span className="ft-secure">●&nbsp; Private workspace</span><button className="ft-button ft-primary ft-top-add-btn" onClick={() => { sessionStorage.setItem('finance-new-kind','expense'); setOpenForm(null); }}><Plus size={17}/> <span>Add transaction</span></button></div></header>
   <Routes><Route index element={<Overview data={data} navigate={navigate} onAdd={add}/>}/><Route path="transactions" element={<Transactions data={data} notesAvailable={data.notesAvailable} onEdit={(t)=>setOpenForm(t)} onRefresh={refresh}/>}/><Route path="investments" element={<InvestmentsCommitments userId={data.userId} methods={data.methods} commitments={data.commitments} payments={data.commitmentPayments} available={data.commitmentsAvailable} loadError={data.commitmentsError} onRefresh={refresh}/>}/><Route path="budgets" element={<Budgets data={data} onRefresh={refresh}/>}/><Route path="analytics" element={<Analytics data={data}/>}/><Route path="categories" element={<Categories data={data} onRefresh={refresh}/>}/><Route path="settings" element={<Settings/>}/><Route path="*" element={<Overview data={data} navigate={navigate} onAdd={add}/>}/></Routes>
   {openForm !== false && <TransactionForm key={openForm?.id||'new'} data={data} edit={openForm?.id?openForm:undefined} onClose={closeForm} onSaved={afterSave}/>}</main></div>;
 }
@@ -67,14 +67,85 @@ function Transactions({data,notesAvailable,onEdit,onRefresh}:{data:Dataset;notes
 function TransactionForm({data,edit,onClose,onSaved}:{data:Dataset;edit?:FinanceTransaction;onClose:()=>void;onSaved:()=>void}) {
  const [kind,setKind]=useState<FinanceKind>(edit?.kind||((sessionStorage.getItem('finance-new-kind') as FinanceKind)||'expense')),[amount,setAmount]=useState(edit?String(edit.amount):''),[category,setCategory]=useState(edit?.category_id||''),[method,setMethod]=useState(edit?.payment_method_id||''),[date,setDate]=useState(edit?.transaction_date||today()),[description,setDescription]=useState(edit?.description||''),[notes,setNotes]=useState(edit?.notes||''),[busy,setBusy]=useState(false),[err,setErr]=useState('');
  const cats=data.categories.filter(c=>c.kind===kind);useEffect(()=>{if(!cats.some(c=>c.id===category))setCategory(cats[0]?.id||'');if(!data.methods.some(m=>m.id===method))setMethod(data.methods[0]?.id||'')},[kind,data.categories,data.methods,category,method]);
- const submit=async(e:React.FormEvent)=>{e.preventDefault();setErr('');const n=Number(amount);if(!Number.isFinite(n)||n<=0||n>9999999999){setErr('Enter an amount greater than zero.');return}if(!category||!method){setErr('Choose a category and payment method.');return}if(!data.notesAvailable&&notes.trim()){setErr('Apply the transaction-notes migration before saving notes. Your transaction was not saved.');return}setBusy(true);try{await saveTransaction(data.userId,{kind,amount:n,category_id:category,payment_method_id:method,transaction_date:date,description:description.trim(),...(data.notesAvailable?{notes:notes.trim()}: {})},edit?.id);await onSaved()}catch(e){setErr(e instanceof Error?e.message:'Could not save transaction.')}finally{setBusy(false)}};
+ const submit=async(e:React.FormEvent)=>{
+   e.preventDefault();
+   setErr('');
+   const n=Number(amount);
+   if(!Number.isFinite(n)||n<=0||n>9999999999){setErr('Enter an amount greater than zero.');return}
+   if(!category||!method){setErr('Choose a category and payment method.');return}
+   if(!data.notesAvailable&&notes.trim()){setErr('Apply the transaction-notes migration before saving notes. Your transaction was not saved.');return}
+   setBusy(true);
+   try{
+     await saveTransaction(data.userId,{kind,amount:n,category_id:category,payment_method_id:method,transaction_date:date,description:description.trim(),...(data.notesAvailable?{notes:notes.trim()}: {})},edit?.id);
+     
+     // When income is added, automatically add the amount to the monthly overall budget
+     if (kind === 'income') {
+       const txMonth = `${date.slice(0, 7)}-01`;
+       const currentOverall = data.budgets.find(b => b.month === txMonth && !b.category_id);
+       const prevBudget = currentOverall ? Number(currentOverall.amount) : 0;
+       const delta = edit ? (edit.kind === 'income' ? n - Number(edit.amount) : n) : n;
+       if (delta !== 0) {
+         await saveBudget(data.userId, txMonth, null, Math.max(0, prevBudget + delta));
+       }
+     }
+
+     await onSaved();
+   }catch(e){
+     setErr(e instanceof Error?e.message:'Could not save transaction.');
+   }finally{
+     setBusy(false);
+   }
+ };
  return <div className="ft-modal-scrim" onMouseDown={e=>{if(e.target===e.currentTarget)onClose()}}><form className="ft-modal" onSubmit={submit}><div className="ft-modal-head"><div><span className="ft-eyebrow">{edit?'UPDATE RECORD':'NEW RECORD'}</span><h2>{edit?'Edit transaction':'Add transaction'}</h2></div><button type="button" className="ft-icon-button" onClick={onClose} aria-label="Close"><X size={19}/></button></div><div className="ft-kind-switch"><button type="button" className={kind==='expense'?'selected':''} onClick={()=>setKind('expense')}>Expense</button><button type="button" className={kind==='income'?'selected income':''} onClick={()=>setKind('income')}>Income</button></div><label className="ft-field"><span>AMOUNT</span><div className="ft-amount-input"><span>₹</span><input type="number" min="0.01" step="0.01" max="9999999999" required placeholder="0.00" value={amount} onChange={e=>setAmount(e.target.value)} autoFocus/></div></label><div className="ft-form-grid"><label className="ft-field"><span>CATEGORY</span><select required value={category} onChange={e=>setCategory(e.target.value)}>{cats.map(c=><option key={c.id} value={c.id}>{c.name}</option>)}</select></label><label className="ft-field"><span>PAYMENT METHOD</span><select required value={method} onChange={e=>setMethod(e.target.value)}>{data.methods.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</select></label><label className="ft-field"><span>DATE</span><input required type="date" value={date} onChange={e=>setDate(e.target.value)}/></label><label className="ft-field"><span>DESCRIPTION <em>OPTIONAL</em></span><input maxLength={240} placeholder="What was this for?" value={description} onChange={e=>setDescription(e.target.value)}/></label><label className="ft-field ft-note-field"><span>NOTES <em>OPTIONAL</em></span><textarea disabled={!data.notesAvailable} maxLength={4000} rows={3} placeholder="Additional details" value={notes} onChange={e=>setNotes(e.target.value)}/>{!data.notesAvailable&&<small className="ft-notes-pending">Notes are available after the transaction-notes migration is applied.</small>}</label></div>{err&&<div className="ft-form-error">{err}</div>}<div className="ft-modal-actions"><button type="button" className="ft-button ft-secondary" onClick={onClose}>Cancel</button><button disabled={busy} className="ft-button ft-primary" type="submit">{busy?'Saving…':edit?'Save changes':'Save transaction'}</button></div></form></div>;
 }
 
 function Budgets({data,onRefresh}:{data:Dataset;onRefresh:()=>void}) {
- const [amount,setAmount]=useState(''),[category,setCategory]=useState('all'),[busy,setBusy]=useState(false),[err,setErr]=useState('');const month=monthKey(),monthTx=data.transactions.filter(t=>t.transaction_date.slice(0,7)===month.slice(0,7));const current=data.budgets.filter(b=>b.month===month);const overall=current.find(b=>!b.category_id);const spending=(id:string|null)=>sum(id?monthTx.filter(t=>t.category_id===id):monthTx,'expense');
- const save=async(e:React.FormEvent)=>{e.preventDefault();const n=Number(amount);if(!(n>0)){setErr('Enter a budget above zero.');return}setBusy(true);try{await saveBudget(data.userId,month,category==='all'?null:category,n);setAmount('');setErr('');onRefresh()}catch(e){setErr(e instanceof Error?e.message:'Could not save budget.')}finally{setBusy(false)}};
- return <div className="ft-content ft-page-content"><article className="ft-card ft-budget-hero"><div><span className="ft-eyebrow">BUDGET PERIOD</span><h2>{prettyMonth(month)}</h2><p>Keep your spending aligned with your plans.</p></div><div className="ft-budget-summary"><span>Spent so far</span><b>{money(spending(null))}</b><small>{overall?`of ${money(Number(overall.amount))}`:'Set an overall limit below'}</small></div></article><form className="ft-card ft-budget-form" onSubmit={save}><div><span className="ft-eyebrow">SET A LIMIT</span><h2>Add or update a budget</h2></div><select value={category} onChange={e=>setCategory(e.target.value)}><option value="all">Overall monthly budget</option>{data.categories.filter(c=>c.kind==='expense').map(c=><option key={c.id} value={c.id}>{c.name} budget</option>)}</select><label className="ft-budget-input"><span>₹</span><input required type="number" min="1" step="0.01" placeholder="Amount" value={amount} onChange={e=>setAmount(e.target.value)}/></label><button disabled={busy} className="ft-button ft-primary"><Plus size={16}/> {busy?'Saving':'Save budget'}</button>{err&&<div className="ft-form-error">{err}</div>}</form><section className="ft-budget-list"><h2>Active budgets <span>{current.length}</span></h2>{current.length?current.map(b=>{const spent=spending(b.category_id),limit=Number(b.amount),pct=spent/limit*100,c=b.category_id?data.categories.find(x=>x.id===b.category_id):null;return <article key={b.id} className="ft-card ft-budget-item"><div className="ft-budget-item-head"><span className="ft-budget-cat"><i>{c?'◉':'◎'}</i><b>{c?.name||'Overall spending'}</b></span><span className={pct>=100?'over':pct>=80?'warn':''}>{pct>=100?'Limit exceeded':pct>=80?'Approaching limit':'On track'}</span></div><div className="ft-budget-values"><b>{money(spent)} <small>spent</small></b><span>{money(Math.max(0,limit-spent))} left of {money(limit)}</span></div><div className="ft-progress"><i style={{width:`${Math.min(100,pct)}%`,background:pct>=100?'#f17783':pct>=80?'#e8b264':'#7d8cff'}}/></div><small className="ft-budget-percent">{pct.toFixed(0)}% used</small></article>}):<div className="ft-card ft-empty">You haven’t set a budget for this month yet. Start with an overall limit above.</div>}</section></div>;
+ const [amount,setAmount]=useState(''),[category,setCategory]=useState('all'),[busy,setBusy]=useState(false),[err,setErr]=useState('');
+ const month=monthKey(),monthTx=data.transactions.filter(t=>t.transaction_date.slice(0,7)===month.slice(0,7));
+ const current=data.budgets.filter(b=>b.month===month);
+ const overall=current.find(b=>!b.category_id);
+ const spending=(id:string|null)=>sum(id?monthTx.filter(t=>t.category_id===id):monthTx,'expense');
+
+ const save=async(e:React.FormEvent)=>{
+   e.preventDefault();
+   const n=Number(amount);
+   if(!(n>0)){setErr('Enter a budget above zero.');return}
+   setBusy(true);
+   try{
+     await saveBudget(data.userId,month,category==='all'?null:category,n);
+     setAmount('');setErr('');onRefresh();
+   }catch(e){
+     setErr(e instanceof Error?e.message:'Could not save budget.');
+   }finally{
+     setBusy(false);
+   }
+ };
+
+ const addToBudget = async (e?: React.MouseEvent) => {
+   if (e) e.preventDefault();
+   const n = Number(amount);
+   if (!(n > 0)) {
+     setErr('Enter an amount to add to the budget.');
+     return;
+   }
+   const targetCatId = category === 'all' ? null : category;
+   const existing = current.find(b => (b.category_id ?? null) === targetCatId);
+   const currentAmount = existing ? Number(existing.amount) : 0;
+   const newAmount = currentAmount + n;
+   setBusy(true);
+   try {
+     await saveBudget(data.userId, month, targetCatId, newAmount);
+     setAmount('');
+     setErr('');
+     onRefresh();
+   } catch (e) {
+     setErr(e instanceof Error ? e.message : 'Could not add to budget.');
+   } finally {
+     setBusy(false);
+   }
+ };
+
+ return <div className="ft-content ft-page-content"><article className="ft-card ft-budget-hero"><div><span className="ft-eyebrow">BUDGET PERIOD</span><h2>{prettyMonth(month)}</h2><p>Keep your spending aligned with your plans.</p></div><div className="ft-budget-summary"><span>Spent so far</span><b>{money(spending(null))}</b><small>{overall?`of ${money(Number(overall.amount))}`:'Set an overall limit below'}</small></div></article><form className="ft-card ft-budget-form" onSubmit={save}><div><span className="ft-eyebrow">SET A LIMIT</span><h2>Add or update a budget</h2></div><select value={category} onChange={e=>setCategory(e.target.value)}><option value="all">Overall monthly budget</option>{data.categories.filter(c=>c.kind==='expense').map(c=><option key={c.id} value={c.id}>{c.name} budget</option>)}</select><label className="ft-budget-input"><span>₹</span><input required type="number" min="1" step="0.01" placeholder="Amount" value={amount} onChange={e=>setAmount(e.target.value)}/></label><div className="ft-budget-form-actions"><button disabled={busy} className="ft-button ft-primary" type="submit"><Plus size={15}/> {busy?'SAVING…':'SAVE BUDGET'}</button><button disabled={busy} type="button" className="ft-button ft-budget-add-btn" onClick={addToBudget}><Plus size={15}/> {busy?'ADDING…':'ADD TO BUDGET'}</button></div>{err&&<div className="ft-form-error">{err}</div>}</form><section className="ft-budget-list"><h2>Active budgets <span>{current.length}</span></h2>{current.length?current.map(b=>{const spent=spending(b.category_id),limit=Number(b.amount),pct=spent/limit*100,c=b.category_id?data.categories.find(x=>x.id===b.category_id):null;return <article key={b.id} className="ft-card ft-budget-item"><div className="ft-budget-item-head"><span className="ft-budget-cat"><i>{c?'◉':'◎'}</i><b>{c?.name||'Overall spending'}</b></span><span className={pct>=100?'over':pct>=80?'warn':''}>{pct>=100?'Limit exceeded':pct>=80?'Approaching limit':'On track'}</span></div><div className="ft-budget-values"><b>{money(spent)} <small>spent</small></b><span>{money(Math.max(0,limit-spent))} left of {money(limit)}</span></div><div className="ft-progress"><i style={{width:`${Math.min(100,pct)}%`,background:pct>=100?'#f17783':pct>=80?'#e8b264':'#7d8cff'}}/></div><div className="ft-budget-foot"><small className="ft-budget-percent">{pct.toFixed(0)}% used</small><button type="button" className="ft-budget-quick-add" title={`Add to ${c?.name||'Overall'} budget`} onClick={()=>{setCategory(b.category_id||'all');const input=prompt(`Add amount to ${c?.name||'Overall'} budget (current: ${money(limit)}):`);if(input){const val=Number(input);if(val>0){void(async()=>{setBusy(true);try{await saveBudget(data.userId,month,b.category_id,limit+val);onRefresh();}catch(e){alert(e instanceof Error?e.message:'Could not add to budget.');}finally{setBusy(false);}})();}}}}><Plus size={12}/> Add to budget</button></div></article>}):<div className="ft-card ft-empty">You haven’t set a budget for this month yet. Start with an overall limit above.</div>}</section></div>;
 }
 
 function Analytics({data}:{data:Dataset}) {
