@@ -16,6 +16,11 @@ export function ProtectedFinance({ children }: { children: React.ReactNode }) {
 
 export function LandingPage() {
   const { user } = useAuth();
+  const location = useLocation();
+  const callbackQuery = new URLSearchParams(location.search);
+  if (callbackQuery.has('code') || callbackQuery.has('error')) {
+    return <Navigate to={{ pathname: '/auth/callback', search: location.search }} replace/>;
+  }
   if (user) return <Navigate to="/app/finance" replace/>;
   return <main className="ft-auth-page"><header className="ft-auth-nav"><a className="ft-auth-brand" href="/"><span><Wallet size={20}/></span>Moneta</a><a className="ft-auth-login-link" href="/login">Sign in <ArrowRight size={15}/></a></header><section className="ft-auth-hero"><div className="ft-auth-copy"><span className="ft-auth-kicker"><span/> PERSONAL FINANCE, WITH CLARITY</span><h1>A calmer way to<br/><em>manage your money.</em></h1><p>One private place for everyday spending, savings goals, investments, and the commitments ahead.</p><a href="/login" className="ft-auth-cta">Get started <ArrowRight size={17}/></a><div className="ft-auth-assurance"><ShieldCheck size={16}/><span>Your financial records stay private to your account.</span></div></div><div className="ft-auth-orbit" aria-hidden="true"><div className="ft-auth-orbit-ring ring-one"/><div className="ft-auth-orbit-ring ring-two"/><div className="ft-auth-orbit-dot dot-one"/><div className="ft-auth-orbit-dot dot-two"/><div className="ft-auth-orbit-card"><span>MONETA / YOUR MONEY</span><strong>Clarity in every<br/>financial decision.</strong><div><i/><i/><i/><i/><i/><i/><i/><i/><i/></div><small><Check size={13}/> Private by design</small></div></div></section><footer className="ft-auth-footer"><span>MONETA</span><span>Private workspace · Built for real life</span></footer></main>;
 }
