@@ -41,6 +41,12 @@ html[data-theme="light"] {
   --moneta-outline: #171510;
 }
 
+/* Prevent any horizontal page overflow */
+html, body {
+  overflow-x: clip;
+  max-width: 100vw;
+}
+
 /* Home Root with Golden/Charcoal Dot Grid */
 .wizz-home-root {
   background-color: var(--moneta-canvas);
@@ -52,7 +58,9 @@ html[data-theme="light"] {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100vw;
+  width: 100%;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
@@ -310,7 +318,9 @@ html[data-theme="light"] .wizz-drawer-link {
   align-items: center;
   text-align: center;
   position: relative;
-  overflow: visible;
+  overflow-x: clip;
+  max-width: 100vw;
+  width: 100%;
 }
 
 /* Parallax Floating Metric Badges */
@@ -340,12 +350,12 @@ html[data-theme="light"] .wizz-floating-chip {
 }
 
 .chip-left {
-  left: max(20px, calc(50% - 480px));
+  left: max(16px, calc(50% - 460px));
   top: 38%;
 }
 
 .chip-right {
-  right: max(20px, calc(50% - 480px));
+  right: max(16px, calc(50% - 460px));
   top: 45%;
 }
 
@@ -505,47 +515,6 @@ html[data-theme="light"] .wizz-badge-pill {
   color: #171510;
   border: 2px solid #171510;
   box-shadow: 3px 3px 0 #171510;
-}
-
-/* =========================================================
-   CONTINUOUS SCROLLING BAUHAUS MARQUEE TICKER TAPE
-   ========================================================= */
-
-.wizz-marquee-band {
-  width: 100%;
-  background: var(--moneta-yellow);
-  color: #171510;
-  overflow: hidden;
-  border-top: 3px solid #171510;
-  border-bottom: 3px solid #171510;
-  padding: 12px 0;
-  user-select: none;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
-}
-
-.wizz-marquee-track {
-  display: flex;
-  width: max-content;
-  white-space: nowrap;
-  animation: marquee-slide 22s linear infinite;
-  will-change: transform;
-}
-
-.wizz-marquee-inner {
-  display: flex;
-  align-items: center;
-  gap: 36px;
-  padding-right: 36px;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-@keyframes marquee-slide {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
 }
 
 /* =========================================================

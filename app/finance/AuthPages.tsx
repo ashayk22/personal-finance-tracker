@@ -247,35 +247,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Continuous Scrolling Bauhaus Marquee Ticker */}
-      <div className="wizz-marquee-band" aria-hidden="true">
-        <div
-          className="wizz-marquee-track"
-          style={{ transform: `translateX(-${(scrollY * 0.45) % 800}px)` }}
-        >
-          <div className="wizz-marquee-inner">
-            <span>✦ REAL-TIME CASHFLOW</span>
-            <span>✦ ROW LEVEL SECURITY</span>
-            <span>✦ AUTO INCOME-TO-BUDGET SYNC</span>
-            <span>✦ 1-CLICK EXPORTS</span>
-            <span>✦ INSTANT TOP-UPS</span>
-            <span>✦ ZERO AD TRACKING</span>
-            <span>✦ PRIVATE WORKSPACE</span>
-            <span>✦ BUILT FOR REAL LIFE</span>
-          </div>
-          <div className="wizz-marquee-inner">
-            <span>✦ REAL-TIME CASHFLOW</span>
-            <span>✦ ROW LEVEL SECURITY</span>
-            <span>✦ AUTO INCOME-TO-BUDGET SYNC</span>
-            <span>✦ 1-CLICK EXPORTS</span>
-            <span>✦ INSTANT TOP-UPS</span>
-            <span>✦ ZERO AD TRACKING</span>
-            <span>✦ PRIVATE WORKSPACE</span>
-            <span>✦ BUILT FOR REAL LIFE</span>
-          </div>
-        </div>
-      </div>
-
       {/* Trust Indicator Strip */}
       <section className="wizz-trust-strip" id="security">
         <div className="wizz-trust-grid">
