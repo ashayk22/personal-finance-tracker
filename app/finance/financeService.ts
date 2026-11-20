@@ -38,10 +38,57 @@ export const defaultMethods = ['Cash','UPI','Debit Card','Credit Card','Bank Tra
 const requireClient = () => { if (!supabase) throw new Error('Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'); return supabase; };
 const result = <T,>(r: { data: T | null; error: { message: string } | null }): T => { if (r.error) throw new Error(r.error.message); return r.data as T; };
 
+const financePageSize = 1000;
+const maxFinanceRows = 100_000;
+
+async function loadAllTransactions(userId: string) {
+  const client = requireClient();
+  const rows: FinanceTransaction[] = [];
+  for (let offset = 0; ; offset += financePageSize) {
+    const page = result(await client.from('finance_transactions')
+      .select('*, category:finance_categories(id,name,kind,icon), payment_method:finance_payment_methods(id,name)')
+      .eq('user_id', userId)
+      .order('transaction_date', { ascending: false })
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: true })
+      .range(offset, offset + financePageSize - 1)) as FinanceTransaction[];
+    rows.push(...page);
+    if (rows.length > maxFinanceRows) {
+      throw new Error('Moneta could not load the complete transaction history because it exceeds the 100,000-row limit. No partial financial totals were shown.');
+    }
+    if (page.length < financePageSize) return rows;
+  }
+}
+
+async function loadAllCommitmentPayments(userId: string): Promise<{ rows: CommitmentPayment[]; error: string }> {
+  const client = requireClient();
+  const rows: CommitmentPayment[] = [];
+  try {
+    for (let offset = 0; ; offset += financePageSize) {
+      const page = result(await client.from('finance_commitment_payments')
+        .select('*')
+        .eq('user_id', userId)
+        .order('due_date', { ascending: false })
+        .order('id', { ascending: true })
+        .range(offset, offset + financePageSize - 1)) as CommitmentPayment[];
+      rows.push(...page);
+      if (rows.length > maxFinanceRows) {
+        throw new Error('Moneta could not load the complete commitment payment history because it exceeds the 100,000-row limit. No partial investment totals were shown.');
+      }
+      if (page.length < financePageSize) return { rows, error: '' };
+    }
+  } catch (cause) {
+    return { rows: [], error: cause instanceof Error ? cause.message : 'Could not load commitment payment history.' };
+  }
+}
 export async function loadFinance() {
   const client = requireClient();
-  const user_id = result(await client.rpc('finance_owner_id')) as string;
-  if (!user_id) throw new Error('The finance owner is not configured in Supabase. Apply the single-owner migration.');
+  const { data: { user }, error: authError } = await client.auth.getUser();
+  if (authError) throw new Error(authError.message);
+  if (!user) throw new Error('Sign in to load your private finance workspace.');
+  const user_id = user.id;
+  const ready = result(await client.rpc('finance_workspace_ready')) as boolean;
+  if (!ready) throw new Error('Moneta is waiting for the existing owner data to be securely linked. The workspace administrator must complete the one-time ownership migration before finance data can load.');
   let categories = result(await client.from('finance_categories').select('*').eq('user_id', user_id).order('name')) as FinanceCategory[];
   let methods = result(await client.from('finance_payment_methods').select('*').eq('user_id', user_id).order('name')) as PaymentMethod[];
   if (!categories.length) {
@@ -50,27 +97,26 @@ export async function loadFinance() {
   if (!methods.length) {
     methods = result(await client.from('finance_payment_methods').insert(defaultMethods.map((name) => ({ name, user_id, is_default: true }))).select('*')) as PaymentMethod[];
   }
-  const [transactions, budgets, notesColumn, commitments, commitmentPayments] = await Promise.all([
-    client.from('finance_transactions').select('*, category:finance_categories(id,name,kind,icon), payment_method:finance_payment_methods(id,name)').eq('user_id', user_id).order('transaction_date', { ascending: false }).order('created_at', { ascending: false }).limit(3000),
+  const [transactions, budgets, notesColumn, commitments, paymentHistory] = await Promise.all([
+    loadAllTransactions(user_id),
     client.from('finance_budgets').select('*').eq('user_id', user_id),
     client.from('finance_transactions').select('notes').limit(0),
     client.from('finance_commitments').select('*, payment_method:finance_payment_methods(id,name)').eq('user_id', user_id).order('next_due_date'),
-    client.from('finance_commitment_payments').select('*').eq('user_id', user_id).order('due_date', { ascending: false }).limit(5000),
+    loadAllCommitmentPayments(user_id),
   ]);
   return {
     categories,
     methods,
-    transactions: result(transactions) as FinanceTransaction[],
+    transactions,
     budgets: result(budgets) as FinanceBudget[],
     userId: user_id,
     notesAvailable: !notesColumn.error,
     commitments: (commitments.error ? [] : commitments.data) as FinanceCommitment[],
-    commitmentPayments: (commitmentPayments.error ? [] : commitmentPayments.data) as CommitmentPayment[],
-    commitmentsError: commitments.error?.message || commitmentPayments.error?.message || '',
-    commitmentsAvailable: !commitments.error && !commitmentPayments.error,
+    commitmentPayments: paymentHistory.rows,
+    commitmentsError: commitments.error?.message || paymentHistory.error,
+    commitmentsAvailable: !commitments.error && !paymentHistory.error,
   };
 }
-
 export async function loadTransactionsForExport(
   userId: string,
   options: { from?: string; to?: string; kind?: FinanceKind } = {},

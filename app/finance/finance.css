@@ -69,3 +69,36 @@
 .ft-filters .ft-search:focus-within{border-color:#8995ff;box-shadow:0 0 0 3px #8995ff24;background:#151a24}
 .ft-filters .ft-search:focus-within svg{color:#a9b2ff}
 @media(max-width:760px){.ft-filters .ft-search{min-height:48px}.ft-filters .ft-search input{height:46px;font-size:14px}}
+
+/* Authenticated workspaces: motion and loading placeholders. */
+.ft-content:not(.ft-skeleton-content)>*{animation:ft-enter .32s cubic-bezier(.2,.75,.25,1) both}
+.ft-content:not(.ft-skeleton-content)>*:nth-child(2){animation-delay:.035s}
+.ft-content:not(.ft-skeleton-content)>*:nth-child(3){animation-delay:.07s}
+.ft-card{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.ft-button:active,.ft-row-action:active,.ft-icon-button:active,.ft-theme-toggle:active,.ft-mobile-menu:active{transform:scale(.97)}
+.ft-side nav a{transition:background .18s,color .18s,transform .18s,box-shadow .18s}
+.ft-side nav a:hover{transform:translateX(2px)}
+.ft-modal{animation:ft-modal-in .2s ease both}
+@keyframes ft-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ft-modal-in{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.ft-skeleton-shell{min-height:100dvh}
+.ft-skel-brand{height:35px;width:142px;margin:0 10px 34px;border-radius:8px}
+.ft-skel-nav{display:grid;gap:12px;padding:6px 8px}
+.ft-skel-nav i{height:15px;width:82%;border-radius:5px}
+.ft-skel-title,.ft-skel-actions,.ft-skel-kpi,.ft-skel-panel>div,.ft-skel-list>div{display:flex;gap:12px}
+.ft-skel-title,.ft-skel-kpi>div,.ft-skel-panel>div,.ft-skel-list>div{flex-direction:column}
+.ft-skel-title{width:220px}.ft-skel-title i:first-child{width:95px;height:9px}.ft-skel-title i:last-child{width:190px;height:25px}
+.ft-skel-actions i{width:40px;height:38px;border-radius:8px}.ft-skel-actions i:last-child{width:138px}
+.ft-skeleton-shell i,.ft-skel-brand,.ft-skel-nav i{display:block;background:linear-gradient(100deg,#252a34 18%,#303641 38%,#252a34 58%);background-size:220% 100%;animation:ft-shimmer 1.35s ease-in-out infinite;border-radius:7px}
+.ft-skel-kpi{min-height:114px;padding:18px;display:flex;align-items:flex-start}
+.ft-skel-kpi>i{width:35px;height:35px;flex:0 0 auto}
+.ft-skel-kpi>div{display:grid;gap:10px;padding-top:3px;width:calc(100% - 48px)}
+.ft-skel-kpi>div i:nth-child(1){height:9px;width:70%}.ft-skel-kpi>div i:nth-child(2){height:20px;width:88%}.ft-skel-kpi>div i:nth-child(3){height:7px;width:53%}
+.ft-skel-panel{height:280px;padding:20px;display:flex;flex-direction:column;justify-content:space-between}
+.ft-skel-panel>div i:first-child{height:14px;width:42%}.ft-skel-panel>div i:last-child{height:9px;width:30%}.ft-skel-panel>i{height:190px;width:100%}
+.ft-skel-list{padding:18px;display:grid;gap:14px}.ft-skel-list>div{display:flex;flex-direction:row;justify-content:space-between;border-bottom:1px solid var(--ft-border);padding-bottom:14px}.ft-skel-list>div i:first-child{height:13px;width:135px}.ft-skel-list>div i:last-child{height:12px;width:55px}.ft-skel-list>i{height:38px;width:100%}
+.ft-auth-error-actions{display:flex;gap:9px;margin-top:12px}.ft-auth-error-actions button,.ft-sound-toggle{min-height:40px;border-radius:8px;padding:0 13px;border:1px solid #343b49;background:#222834;color:#d0d4df;cursor:pointer}
+.ft-sound-toggle{display:inline-flex;align-items:center;gap:10px;font-size:12px}.ft-sound-toggle i{width:34px;height:19px;margin-left:8px;border-radius:99px;background:#3b424f;position:relative;transition:background .16s}.ft-sound-toggle i:after{content:"";position:absolute;width:13px;height:13px;left:3px;top:3px;border-radius:50%;background:#cbd0dc;transition:transform .16s}.ft-sound-toggle.enabled i{background:#818dff}.ft-sound-toggle.enabled i:after{transform:translateX(15px);background:#111521}
+.ft-side-signout{width:34px;height:34px;display:grid;place-items:center;border:1px solid #343b49;background:transparent;color:#929bad;border-radius:8px;cursor:pointer}.ft-side-signout:hover{background:#272d39;color:#e8ebf2}
+@keyframes ft-shimmer{to{background-position-x:-220%}}
+@media(prefers-reduced-motion:reduce){.ft-app *, .ft-app *:before,.ft-app *:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
