@@ -1,4 +1,5 @@
 'use client';
+import { SakugaButton } from './SakugaButton';
 
 import { useState } from 'react';
 import { Download, FileSpreadsheet, FileText, LoaderCircle, X } from 'lucide-react';
@@ -364,10 +365,10 @@ export function ExportExpensesDialog({ userId, notesAvailable, onClose }: { user
         {error && <div className="ft-form-error" role="alert">{error}</div>}
         {message && <p className="ft-export-feedback" role="status">{message}</p>}
         <div className="ft-modal-actions">
-          <button type="button" className="ft-button ft-secondary" onClick={onClose} disabled={busy}>Cancel</button>
-          <button type="button" className="ft-button ft-primary" onClick={() => void runExport()} disabled={busy}>
+          <SakugaButton type="button" className="ft-button ft-secondary" onClick={onClose} disabled={busy}>Cancel</SakugaButton>
+          <SakugaButton type="button" className="ft-button ft-primary" onClick={() => void runExport()} disabled={busy}>
             {busy ? <><LoaderCircle size={16} className="ft-spin"/> Preparing export…</> : <><Download size={16}/> Export {format.toUpperCase()}</>}
-          </button>
+          </SakugaButton>
         </div>
       </section>
     </div>

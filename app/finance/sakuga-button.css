@@ -1,0 +1,177 @@
+/* Moneta sizing and palette for the Sakuga VFX button custom element. */
+.ft-app sakuga-button.ft-button {
+  --sk-ink: #131313;
+  --sk-card: #ffcc00;
+  --sk-acc: #e63b2e;
+  --sk-soft: #ffcc00;
+  --sk-btn-line: #050505;
+  --sk-alt-line: #57575d;
+  --sk-bw: 2px;
+  --sk-r: 0px;
+  --sk-btn-sh: 4px 4px 0 #050505;
+  --sk-alt-sh: 4px 4px 0 #050505;
+  --sk-btn-pad: 8px 15px;
+  --sk-btn-font: 700 11px/1.2 "Space Grotesk", Inter, ui-sans-serif, sans-serif;
+  display: inline-block;
+  min-height: 44px;
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  vertical-align: middle;
+}
+
+.ft-app sakuga-button.ft-button.ft-secondary {
+  --sk-ink: var(--ft-text);
+  --sk-card: #242429;
+  --sk-acc: #ffcc00;
+}
+
+.ft-app sakuga-button.ft-button.ft-export-button {
+  --sk-ink: #131313;
+  --sk-card: #ffcc00;
+  --sk-btn-line: #050505;
+  --sk-btn-sh: 4px 4px 0 #050505;
+}
+
+.ft-app sakuga-button.ft-button.ft-mark-paid {
+  --sk-ink: #fff;
+  --sk-card: #245b49;
+  --sk-acc: #ffcc00;
+  --sk-btn-line: #153d30;
+  --sk-btn-sh: 4px 4px 0 #153d30;
+  --sk-btn-pad: 4px 9px;
+  --sk-btn-font: 700 9px/1.2 "Space Grotesk", Inter, ui-sans-serif, sans-serif;
+  min-height: 31px;
+}
+
+.ft-app sakuga-button.ft-button.ft-budget-add-btn {
+  --sk-ink: var(--ft-text);
+  --sk-card: var(--ft-panel);
+  --sk-btn-line: var(--ft-border);
+  --sk-btn-sh: 4px 4px 0 #050505;
+  --sk-acc: #ffcc00;
+}
+
+.ft-app sakuga-button.ft-button.ft-add-commitment-small {
+  --sk-btn-pad: 4px 10px;
+  --sk-btn-font: 700 10px/1.2 "Space Grotesk", Inter, ui-sans-serif, sans-serif;
+  min-height: 31px;
+}
+
+.ft-app sakuga-button.ft-button.ft-theme-toggle {
+  --sk-ink: #f5f0e8;
+  --sk-card: #1c1c20;
+  --sk-acc: #ffcc00;
+  --sk-btn-line: #414147;
+  --sk-btn-sh: 3px 3px 0 #050505;
+  --sk-btn-pad: 6px 10px;
+  --sk-btn-font: 600 10px/1.2 "Space Grotesk", Inter, ui-sans-serif, sans-serif;
+  min-height: 38px;
+}
+
+.ft-app sakuga-button.ft-button.ft-row-action {
+  --sk-ink: #d7dbe5;
+  --sk-card: #272d39;
+  --sk-acc: #ffcc00;
+  --sk-btn-line: #414147;
+  --sk-btn-sh: 2px 2px 0 #050505;
+  --sk-btn-pad: 4px;
+  --sk-btn-font: 600 10px/1 "Space Grotesk", Inter, ui-sans-serif, sans-serif;
+  width: 30px;
+  height: 30px;
+  min-height: 30px;
+  padding: 0;
+}
+
+.ft-app sakuga-button.ft-button.ft-row-action.danger {
+  --sk-ink: #e48391;
+  --sk-card: #34262d;
+  --sk-acc: #ffcc00;
+  --sk-btn-line: #633b46;
+  --sk-btn-sh: 2px 2px 0 #170d10;
+}
+
+html[data-theme="light"] .ft-app sakuga-button.ft-button.ft-secondary {
+  --sk-ink: #1b1a17;
+  --sk-card: #fffdf7;
+  --sk-btn-line: #27251f;
+  --sk-alt-line: #27251f;
+  --sk-btn-sh: 4px 4px 0 #27251f;
+  --sk-alt-sh: 4px 4px 0 #27251f;
+  --sk-acc: #b28c00;
+}
+
+html[data-theme="light"] .ft-app sakuga-button.ft-button.ft-budget-add-btn {
+  --sk-ink: #171510;
+  --sk-card: #fffdf7;
+  --sk-btn-line: #171510;
+  --sk-btn-sh: 3px 3px 0 #171510;
+}
+
+html[data-theme="light"] .ft-app sakuga-button.ft-button.ft-mark-paid {
+  --sk-ink: #15533e;
+  --sk-card: #eaf4ed;
+  --sk-btn-line: #278153;
+  --sk-btn-sh: 3px 3px 0 #278153;
+}
+
+html[data-theme="light"] .ft-app sakuga-button.ft-button.ft-theme-toggle {
+  --sk-ink: #1b1a17;
+  --sk-card: #fffdf7;
+  --sk-btn-line: #27251f;
+  --sk-btn-sh: 3px 3px 0 #27251f;
+  --sk-acc: #705400;
+}
+
+html[data-theme="light"] .ft-app sakuga-button.ft-button.ft-row-action {
+  --sk-ink: #1b1a17;
+  --sk-card: #fffdf7;
+  --sk-btn-line: #625e55;
+  --sk-btn-sh: 2px 2px 0 #27251f;
+}
+
+html[data-theme="light"] .ft-app sakuga-button.ft-button.ft-row-action.danger {
+  --sk-ink: #a6281f;
+  --sk-card: #fff0ed;
+  --sk-btn-line: #c73327;
+  --sk-btn-sh: 2px 2px 0 #762018;
+}
+
+.ft-app sakuga-button.ft-button:focus-visible {
+  outline: 2.5px solid #ff5fa8;
+  outline-offset: 4px;
+}
+
+.ft-sakuga-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ft-app sakuga-button.ft-button {
+    --sk-btn-sh: 2px 2px 0 #050505;
+    --sk-alt-sh: 2px 2px 0 #050505;
+  }
+}
+
+@media (max-width: 760px) {
+  .ft-app sakuga-button.ft-button.ft-row-action {
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+}

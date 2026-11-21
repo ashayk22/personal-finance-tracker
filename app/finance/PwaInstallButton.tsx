@@ -1,4 +1,5 @@
 'use client';
+import { SakugaButton } from './SakugaButton';
 import { useEffect, useState } from 'react';
 import { Download, Share } from 'lucide-react';
 
@@ -89,9 +90,9 @@ export function PwaInstallButton() {
   if (installed) return <p className="ft-install-status" role="status">Moneta is installed on this device.</p>;
   return (
     <div className="ft-install">
-      <button type="button" className="ft-button ft-primary" onClick={() => void install()}>
+      <SakugaButton type="button" className="ft-button ft-primary" onClick={() => void install()}>
         {iosSafari ? <Share size={16} /> : <Download size={16} />}Add to Home Screen
-      </button>
+      </SakugaButton>
       {showInstructions && (
         <div className="ft-install-instructions" role="status">
           <b>Add Moneta to your Home Screen</b>

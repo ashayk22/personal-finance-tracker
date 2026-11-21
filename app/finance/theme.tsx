@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
+import { SakugaButton } from './SakugaButton';
 
 export type MonetaTheme = 'dark' | 'light';
 const STORAGE_KEY = 'moneta-theme';
@@ -38,14 +39,14 @@ export function ThemeToggle({ withLabel = false }: { withLabel?: boolean }) {
   const theme = useMonetaTheme();
   const nextTheme = theme === 'dark' ? 'light' : 'dark';
   const Icon = nextTheme === 'light' ? Sun : Moon;
-  return <button
+  return <SakugaButton
     type="button"
-    className={`ft-theme-toggle${withLabel ? ' with-label' : ''}`}
+    className={`ft-button ft-theme-toggle${withLabel ? ' with-label' : ''}`}
     onClick={() => setMonetaTheme(nextTheme)}
     aria-label={`Switch to ${nextTheme} mode`}
     aria-pressed={theme === 'light'}
     title={`Switch to ${nextTheme} mode`}
-  ><Icon size={16}/>{withLabel && <span>{theme === 'dark' ? 'Dark mode' : 'Light mode'}</span>}</button>;
+  ><Icon size={16}/>{withLabel && <span>{theme === 'dark' ? 'Dark mode' : 'Light mode'}</span>}</SakugaButton>;
 }
 
 export function ThemeSettings() {

@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Script from 'next/script';
 import dynamic from 'next/dynamic';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from '../src/lib/auth';
@@ -13,6 +14,8 @@ const FinancePage = dynamic(
 
 export default function FinanceShell() {
   return (
+    <>
+    <Script src="/sakuga-vfx/button.js" strategy="afterInteractive" />
     <AuthProvider>
       <InteractionPreferencesProvider>
         <BrowserRouter>
@@ -26,5 +29,6 @@ export default function FinanceShell() {
         </BrowserRouter>
       </InteractionPreferencesProvider>
     </AuthProvider>
+    </>
   );
 }
